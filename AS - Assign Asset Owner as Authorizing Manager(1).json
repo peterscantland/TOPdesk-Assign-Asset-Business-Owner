@@ -1,0 +1,77 @@
+{
+    "formatVersion": "2.10",
+    "exportDate": 1624993270377,
+    "actionSequence": {
+        "name": "AS -  Assign  Asset Owner as Authorizing Manager",
+        "description": "•\tStep 1 – Get Asset linked to the change. This looks up the asset that is linked to the change.\n•\tStep 2 – Get Asset Assignments. This looks at the linked asset’s assignee. \n•\tStep 3 – Assign authorization activity to asset assignee. This takes the person from the previous step and assigns them as the authorization activity manager.\n",
+        "structureName": "changeactivity2",
+        "configuration": {
+            "variables": [
+                {
+                    "name": "topdeskAddress",
+                    "value": ""
+                },
+                {
+                    "name": "TOPdesk_user",
+                    "value": ""
+                },
+                {
+                    "name": "TOPdesk_applicationpassword",
+                    "value": ""
+                }
+            ],
+            "mappingDefinitions": [],
+            "steps": [
+                {
+                    "name": "get_assetid_from_objectid",
+                    "method": "GET",
+                    "url": "${_variables.topdeskAddress?no_esc}/tas/api/assetmgmt/assets?linkedTo=change/${changeid}",
+                    "headers": [
+                        {
+                            "name": "Authorization",
+                            "value": "Basic  ${_base64(_variables.TOPdesk_user + \":\" + _variables.TOPdesk_applicationpassword)}"
+                        }
+                    ],
+                    "escapeBodyValues": true,
+                    "body": "",
+                    "executionCondition": "ONLY_WHEN_PREVIOUS_SUCCEEDED",
+                    "customExecutionCondition": ""
+                },
+                {
+                    "name": "get_asset_assignments",
+                    "method": "GET",
+                    "url": "${_variables.topdeskAddress?no_esc}/tas/api/assetmgmt/assets/${_responses.get_assetid_from_objectid.body.dataSet[0].id}/assignments",
+                    "headers": [
+                        {
+                            "name": "Authorization",
+                            "value": "Basic  ${_base64(_variables.TOPdesk_user + \":\" + _variables.TOPdesk_applicationpassword)}"
+                        }
+                    ],
+                    "escapeBodyValues": true,
+                    "body": "",
+                    "executionCondition": "ONLY_WHEN_PREVIOUS_SUCCEEDED",
+                    "customExecutionCondition": ""
+                },
+                {
+                    "name": "set_authorizer",
+                    "method": "PATCH",
+                    "url": "${_variables.topdeskAddress?no_esc}/tas/api/operatorChangeActivities/${unid}",
+                    "headers": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json-patch+json"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Basic  ${_base64(_variables.TOPdesk_user + \":\" + _variables.TOPdesk_applicationpassword)}"
+                        }
+                    ],
+                    "escapeBodyValues": true,
+                    "body": "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/assignee/type\",\n    \"value\": \"manager\"\n  },\n  {\n    \"op\": \"replace\",\n    \"path\": \"/assignee/id\",\n    \"value\": \"${_responses.get_asset_assignments.body.persons[0].person.id}\"\n  }\n]",
+                    "executionCondition": "ONLY_WHEN_PREVIOUS_SUCCEEDED",
+                    "customExecutionCondition": ""
+                }
+            ]
+        }
+    }
+}
