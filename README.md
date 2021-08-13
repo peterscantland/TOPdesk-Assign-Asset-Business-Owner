@@ -10,8 +10,11 @@ When doing patches/updates/maintenance to a particular asset, it is valuable to 
 Explanation of Steps:
 
 Step 1 – Get asset linked to the change. This looks up the asset that is linked to the change.
+
 Step 2 – Get asset assignments. This looks at the linked asset’s assignee. 
+
 Step 3 – Assign authorization activity to asset assignee. This takes the person from the previous step and assigns them as the authorization activity manager.
+
 
 Permissions for API Operator:
 1.	API: REST API - Read, Application Passwords - Write.
