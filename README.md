@@ -8,9 +8,9 @@ Use Case:
 When doing patches/updates/maintenance to a particular asset, it is valuable to notify the manager/owner of that asset of the upcoming disruption & change. Then you need to get the asset owner’s approval. In an extensive change workflow, you can insert an authorization activity to get approval from a manager before proceeding with the change. This action sequence looks up the owner of the asset linked to the change, and assigns them as the authorization activity manager. An example would be getting approval from the server owner on the restart time, before doing maintenance on a server. Another example would be getting approval from the application manager before updating an application.
 
 Explanation of Steps:     
-Step 1 – Get asset linked to the change. This looks up the asset that is linked to the change. 
-Step 2 – Get asset assignments. This looks at the linked asset’s assignee. 
-Step 3 – Assign authorization activity to asset assignee. This takes the person from the previous step and assigns them as the authorization activity manager.
+Step 1 – Get asset linked to the change. This looks up the asset that is linked to the change.     
+Step 2 – Get asset assignments. This looks at the linked asset’s assignee.     
+Step 3 – Assign authorization activity to asset assignee. This takes the person from the previous step and assigns them as the authorization activity manager.     
 
 Permissions for API Operator:
 1.	API: REST API - Read, Application Passwords - Write.
